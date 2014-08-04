@@ -47,3 +47,11 @@ get_or_post '/client/?' do
   @token = capability.generate
   erb :client
 end
+
+get_or_post '/record/?' do
+  response = Twilio::TwiML::Response.new do |r|
+    r.Say "Please record your message at the beep. Press the pound sign when done", voice: "Alice"
+    r.Record finish_on_key: "#", action: "/playback", method: "POST", max_length: "60"
+    r.Say "I did not hear a recording. Goodbye." 
+  end
+end
